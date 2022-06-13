@@ -96,103 +96,32 @@ namespace Ex05.UI
 
         }
 
-
-
-        public FormDamka(int i_BoardSize, string i_PlayerOneName, string i_PlayerTwoName, int i_NumOfPlayers)
+        private void label1_Click(object sender, EventArgs e)
         {
-            m_BoardSize = i_BoardSize;
-            m_PlayerOneName = i_PlayerOneName;
-            m_PlayerTwoName = i_PlayerTwoName;
-            m_NumOfPlayers = i_NumOfPlayers;
-            m_ButtonsArray = new Button[m_BoardSize, m_BoardSize];
 
+        }
+
+        private void FormDamka_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+        public FormDamka()
+        {
             InitializeComponent();
-            SetSize();
-            BuildBoard();
         }
 
-        private void BuildBoard()
-        {
-            setLabels();
-            setButtons();
-        }
-
-        private void setButtons()
-        {
-            for (int i = 0; i < m_BoardSize; i++)
-            {
-                for (int j = 0; j < m_BoardSize; j++)
-                {
-                    m_ButtonsArray[i, j] = new Button();
-                    if (i % 2 == 0)
-                    {
-                        if (j % 2 == 0)
-                        {
-                            m_ButtonsArray[i, j].Enabled = false;
-                            m_ButtonsArray[i, j].BackColor = System.Drawing.Color.Gray;
-                        }
-                        else
-                        {
-                            m_ButtonsArray[i, j].BackColor = System.Drawing.Color.White;
-                        }
-                    }
-                    else
-                    {
-                        if (j % 2 == 0)
-                        {
-                            m_ButtonsArray[i, j].BackColor = System.Drawing.Color.White;
-                        }
-                        else
-                        {
-                            m_ButtonsArray[i, j].Enabled = false;
-                            m_ButtonsArray[i, j].BackColor = System.Drawing.Color.Gray;
-
-                        }
-                    }
-                    m_ButtonsArray[i, j].Width = width;
-                    m_ButtonsArray[i, j].Height = height;
-                    m_ButtonsArray[i, j].Top = (i * height) + topMargin; // להוסיף קבוע שתלוי בboardsize
-                    m_ButtonsArray[i, j].Left = (j * width) + margin;
-
-                    //m_ButtonsArray[i, j].Click += button_Click;
-
-
-                    this.Controls.Add(m_ButtonsArray[i, j]);
-                }
-            }
-        }
-
-        //private void button_Click(object sender, EventArgs e)
-        //{
-        //        Button button = (Button)sender;
-
-        //    MessageBox.Show(button.Text);
-        //}
-
-        private void setLabels()
-        {
-            labelName1.Text = m_PlayerOneName + ":";
-            labelName2.Text = m_PlayerTwoName + ":";
-        }
-
-        private void SetSize()
-        {
-            int formWidth = m_BoardSize * width + margin * 2;
-            int formHeight = m_BoardSize * height + margin + topMargin;
-
-            if (m_BoardSize == 6)
-            {
-                this.ClientSize = new System.Drawing.Size(formWidth, formHeight);
-            }
-            else if (m_BoardSize == 8)
-            {
-                this.ClientSize = new System.Drawing.Size(formWidth, formHeight);
-            }
-            else
-            {
-                this.ClientSize = new System.Drawing.Size(formWidth, formHeight);
-            }
-        }
 
         #endregion
 
@@ -204,6 +133,6 @@ namespace Ex05.UI
         private System.Windows.Forms.Label labelPlayer2;
         private System.Windows.Forms.Label labelName1;
         private System.Windows.Forms.Label labelName2;
-        private Button[,] m_ButtonsArray;
+
     }
 }

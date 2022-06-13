@@ -55,7 +55,6 @@
     <Compile Include="UI\FormGameSettings.Designer.cs">
       <DependentUpon>FormGameSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Messages.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Ex02.ConsoleUtils">
