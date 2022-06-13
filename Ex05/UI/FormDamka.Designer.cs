@@ -154,7 +154,7 @@ namespace Ex05.UI
                     m_ButtonsArray[i, j].Top = (i * height) + topMargin; // להוסיף קבוע שתלוי בboardsize
                     m_ButtonsArray[i, j].Left = (j * width) + margin;
 
-                    m_ButtonsArray[i, j].Click += button_Click;
+                    //m_ButtonsArray[i, j].Click += button_Click;
 
 
                     this.Controls.Add(m_ButtonsArray[i, j]);
@@ -162,10 +162,12 @@ namespace Ex05.UI
             }
         }
 
-        private void button_Click(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
+        //private void button_Click(object sender, EventArgs e)
+        //{
+        //        Button button = (Button)sender;
+
+        //    MessageBox.Show(button.Text);
+        //}
 
         private void setLabels()
         {

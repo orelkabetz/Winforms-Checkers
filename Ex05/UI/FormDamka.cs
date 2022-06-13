@@ -50,6 +50,7 @@ namespace Ex05.UI
                     if (printableArray[printableArrayCounter].ToString() == i_playarTurn.getShapeChar().ToString())
                     {
                         m_ButtonsArray[i, j].Enabled = true;
+
                     }
                     else
                     {
@@ -57,9 +58,17 @@ namespace Ex05.UI
                     }
                     m_ButtonsArray[i, j].Text = printableArray[printableArrayCounter].ToString();
                     m_ButtonsArray[i, j].Font = new Font(m_ButtonsArray[i, j].Font, FontStyle.Bold);
+                    m_ButtonsArray[i, j].Click += FormDamka_Click;
                     printableArrayCounter++;
                 }
             }
+        }
+
+        public void FormDamka_Click(object sender, EventArgs e)
+        { 
+            Button button = (Button)sender;
+            MessageBox.Show(button.Text);
+       
         }
 
         private void enableCurrentPlayerButtons(ShapeWrapper i_playarTurn)

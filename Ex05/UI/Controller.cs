@@ -14,7 +14,7 @@ namespace Ex05.UI
         private ShapeWrapper m_previousTurn;
         private FormGameSettings m_FormGameSettings;
         private FormDamka m_FormDamka;
-        
+        private Action<object, EventArgs> onButtonClick;
 
         public Controller()
         {
@@ -42,6 +42,8 @@ namespace Ex05.UI
                 {
                     //turn 1
                     printBoard();
+
+                    onButtonClick += m_FormDamka.FormDamka_Click;
 
                     turnPlaying(ref io_finished, ref io_keepPlaying);
                     if (io_finished)
@@ -116,6 +118,7 @@ namespace Ex05.UI
             intializeBoard(m_messages.BoardSize);
             printBoard();
         }
+
 
         private void turnPlaying(ref bool io_finished, ref bool io_keepPlaying)
         {
@@ -317,6 +320,7 @@ namespace Ex05.UI
 
         private void setUserMove()
         {
+
             m_messages.CurrentMove = Console.ReadLine();
             if (!isUserMoveValid(m_messages.CurrentMove))
             {
