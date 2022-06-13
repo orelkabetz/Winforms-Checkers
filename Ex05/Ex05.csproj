@@ -42,6 +42,9 @@
     <Compile Include="Logic\Position.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ShapeWrapper.cs" />
+    <Compile Include="UI\ButtonCheckers.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UI\Controller.cs" />
     <Compile Include="UI\FormDamka.cs">
       <SubType>Form</SubType>
@@ -55,6 +58,7 @@
     <Compile Include="UI\FormGameSettings.Designer.cs">
       <DependentUpon>FormGameSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\OldController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Ex02.ConsoleUtils">

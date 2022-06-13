@@ -12,18 +12,16 @@ namespace Ex05.UI
 {
     public partial class FormDamka : Form
     {
-        private Button[,] m_ButtonsArray;
-        Game m_game;
-        private ShapeWrapper m_playerTurn;
-        private ShapeWrapper m_previousTurn;
+        private ButtonCheckers[,] m_ButtonsArray;
+        private string m_currentMove;
+        //private string m_previousMove;
         public FormDamka(int i_BoardSize, string i_PlayerOneName, string i_PlayerTwoName, int i_NumOfPlayers)
         {
             m_BoardSize = i_BoardSize;
             m_PlayerOneName = i_PlayerOneName;
             m_PlayerTwoName = i_PlayerTwoName;
             m_NumOfPlayers = i_NumOfPlayers;
-            m_ButtonsArray = new Button[m_BoardSize, m_BoardSize];
-            m_game = new Game(i_BoardSize, i_PlayerOneName, i_PlayerTwoName);
+            m_ButtonsArray = new ButtonCheckers[m_BoardSize, m_BoardSize];
 
             InitializeComponent();
             Start();
@@ -31,9 +29,7 @@ namespace Ex05.UI
 
         private void Start()
         {
-            intializeGameStateBoard(m_BoardSize);
             InitializeBoard();
-            printBoard();
         }
 
         private void InitializeBoard()
@@ -49,7 +45,7 @@ namespace Ex05.UI
             {
                 for (int j = 0; j < m_BoardSize; j++)
                 {
-                    m_ButtonsArray[i, j] = new Button();
+                    m_ButtonsArray[i, j] = new ButtonCheckers(i, j);
                     if (i % 2 == 0)
                     {
                         if (j % 2 == 0)
@@ -79,6 +75,7 @@ namespace Ex05.UI
                     m_ButtonsArray[i, j].Height = height;
                     m_ButtonsArray[i, j].Top = (i * height) + topMargin;
                     m_ButtonsArray[i, j].Left = (j * width) + margin;
+                    //m_ButtonsArray[i,j].MouseHover += (sender, e) => { m_ButtonsArray[i, j].ForeColor = System.Drawing.Color.Azure; };
                     this.Controls.Add(m_ButtonsArray[i, j]);
                 }
             }
@@ -121,8 +118,44 @@ namespace Ex05.UI
                 {
                     if (printableArray[printableArrayCounter].ToString() == i_playarTurn.getShapeChar().ToString())
                     {
-                        m_ButtonsArray[i, j].Enabled = true;
+                        if((i != 0))
+                        {
+                            if ((j != 0) && (j != m_BoardSize - 1))
+                            {
+                                if ((m_ButtonsArray[i - 1, j + 1].Text == " ") || (m_ButtonsArray[i - 1, j - 1].Text == " "))
+                                {
+                                    m_ButtonsArray[i, j].Enabled = true;
+                                }
+                                else
+                                {
+                                    m_ButtonsArray[i, j].Enabled = false;
+                                }
+                            }
+                            else if (j == 0)
+                            {
+                                if (m_ButtonsArray[i - 1, j + 1].Text == " ")
+                                {
+                                    m_ButtonsArray[i, j].Enabled = true;
+                                }
+                                else
+                                {
+                                    m_ButtonsArray[i, j].Enabled = false;
+                                }
+                            }
+                            else if (j == m_BoardSize - 1)
+                            {
+                                if (m_ButtonsArray[i - 1, j - 1].Text == " ")
+                                {
+                                    m_ButtonsArray[i, j].Enabled = true;
+                                }
+                                else
+                                {
+                                    m_ButtonsArray[i, j].Enabled = false;
+                                }
+                            }
 
+                        }
+                        //m_ButtonsArray[i, j].Enabled = true;
                     }
                     else
                     {
@@ -130,26 +163,27 @@ namespace Ex05.UI
                     }
                     m_ButtonsArray[i, j].Text = printableArray[printableArrayCounter].ToString();
                     m_ButtonsArray[i, j].Font = new Font(m_ButtonsArray[i, j].Font, FontStyle.Bold);
-                    m_ButtonsArray[i, j].Click += (sender, EventArgs)=> { FormDamka_Click(sender, EventArgs, i, j); };
+                    m_ButtonsArray[i, j].Click += FormDamka_Click;
                     printableArrayCounter++;
                 }
             }
+            this.Refresh();
         }
 
-        public void FormDamka_Click(object sender, EventArgs e, int i_i, int i_j)
+        public void FormDamka_Click(object sender, EventArgs e)
         {
-            Button clickedButton = sender as Button;
-            //MessageBox.Show(button.Text);
-            TurnPlaying(clickedButton.Text, i_i, i_j);
-
+            ButtonCheckers clickedButton = sender as ButtonCheckers;
+            m_currentMove += convertIndexToPosition(clickedButton.row, clickedButton.col);
+            m_currentMove += '>';
         }
 
-        private void TurnPlaying(string text, int i_i, int i_j)
+        private string convertIndexToPosition(int row, int col)
         {
-            if (text != "")
-            {
+            string resultPosition = "";
+            resultPosition += Convert.ToChar((col + 'A'));
+            resultPosition += Convert.ToChar((row + 'a'));
 
-            }
+            return resultPosition;
         }
 
         private void enableCurrentPlayerButtons(ShapeWrapper i_playarTurn)
@@ -158,136 +192,12 @@ namespace Ex05.UI
             {
                 labelName1.Font = new Font(labelName1.Font, FontStyle.Bold);
                 labelPlayer1.Font = new Font(labelPlayer1.Font, FontStyle.Bold);
-
             }
             else
             {
                 labelName2.Font = new Font(labelName2.Font, FontStyle.Bold);
                 labelPlayer2.Font = new Font(labelPlayer2.Font, FontStyle.Bold);
-
             }
         }
-
-        private void intializeGameStateBoard(int boardSize)
-        {
-            genereateOPieces(boardSize);
-            generateEPieces(boardSize);
-            genereateXPieces(boardSize);
-        }
-
-        private void genereateOPieces(int boardSize)
-        {
-            for (int i = 0; i < (boardSize / 2) - 1; i++)
-            {
-                for (int j = 0; j < boardSize; j++)
-                {
-                    if (i % 2 == 0)
-                    {
-                        if (j % 2 == 0)
-                        {
-                            m_game.currentState.BoardArray[i, j] = generateNewEmptyPiece();
-                        }
-                        else
-                        {
-                            m_game.currentState.BoardArray[i, j] = generateNewOPiece();
-                        }
-                    }
-                    else
-                    {
-                        if (j % 2 == 0)
-                        {
-                            m_game.currentState.BoardArray[i, j] = generateNewOPiece();
-                        }
-                        else
-                        {
-                            m_game.currentState.BoardArray[i, j] = generateNewEmptyPiece();
-                        }
-
-                    }
-                }
-            }
-        }
-
-        private Piece generateNewOPiece()
-        {
-            return new Piece(new ShapeWrapper('O'));
-        }
-
-        private void generateEPieces(int boardSize)
-        {
-            for (int i = (boardSize / 2) - 1; i < (boardSize / 2) + 1; i++)
-            {
-                for (int j = 0; j < boardSize; j++)
-                {
-                    m_game.currentState.BoardArray[i, j] = generateNewEmptyPiece();
-                }
-            }
-        }
-
-        private Piece generateNewEmptyPiece()
-        {
-            return new Piece(new ShapeWrapper(' '));
-        }
-
-        private void genereateXPieces(int boardSize)
-        {
-            for (int i = (boardSize / 2) + 1; i < boardSize; i++)
-            {
-                for (int j = 0; j < boardSize; j++)
-                {
-                    if (i % 2 == 1)
-                    {
-                        if (j % 2 == 0)
-                        {
-                            m_game.currentState.BoardArray[i, j] = generateNewXPiece();
-                        }
-                        else
-                        {
-                            m_game.currentState.BoardArray[i, j] = generateNewEmptyPiece();
-                        }
-                    }
-                    else
-                    {
-                        if (j % 2 == 0)
-                        {
-                            m_game.currentState.BoardArray[i, j] = generateNewEmptyPiece();
-                        }
-                        else
-                        {
-                            m_game.currentState.BoardArray[i, j] = generateNewXPiece();
-                        }
-
-                    }
-                }
-            }
-        }
-
-        private Piece generateNewXPiece()
-        {
-            return new Piece(new ShapeWrapper('X'));
-        }
-
-        private void printBoard()
-        {
-            object[] printableArray = CreatePrintableArray();
-
-            ShowBoard(printableArray, m_game.currentState.playerTurn);
-        }
-
-        public object[] CreatePrintableArray()
-        {
-            const int maxSize = 10;
-            // object[] o_printableArray = new object[m_messages.BoardSize * m_messages.BoardSize];
-            object[] o_printableArray = new object[maxSize * maxSize]; // need to define MAX
-            for (int i = 0; i < m_BoardSize; i++)
-            {
-                for (int j = 0; j < m_BoardSize; j++)
-                {
-                    o_printableArray[i * m_BoardSize + j] = m_game.currentState.BoardArray[i, j].Shape.getShapeChar();
-                }
-            }
-            return o_printableArray;
-        }
-
     }
 }

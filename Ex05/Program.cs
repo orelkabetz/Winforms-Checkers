@@ -10,8 +10,9 @@ namespace Ex05
     {
         public static void Main()
         {
-            Controller controller = new Controller();
-            controller.Run();
+            //Controller controller = new Controller();
+            OldController oldController = new OldController();
+            oldController.Run();
         }
     }
 }

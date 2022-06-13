@@ -131,64 +131,64 @@ namespace Ex05.UI
         //}
 
 
-        private void turnPlaying(ref bool io_finished, ref bool io_keepPlaying)
-        {
-            bool moveIlegal;
-            bool quit = true;
-            while (io_keepPlaying)
-            {
-                // is there eating before move
-                io_keepPlaying = m_game.currentState.IsEatingPossible();
-                setUserMove();
-                io_finished = checkIfUserQuit();
-                if (io_finished)
-                {
-                    m_game.currentState.CheckGameOver(quit);
-                    switchTurn();
-                    if (m_playerTurn.getShapeChar() == 'X')
-                    {
-                        m_messages.DisplayWinner(m_playerTurn, m_game.currentState.xScore);
-                    }
-                    else
-                    {
-                        m_messages.DisplayWinner(m_playerTurn, m_game.currentState.oScore);
-                    }
-                    if (m_messages.CheckRestartGame())
-                    {
-                        io_finished = false;
-                        io_keepPlaying = true;
-                        switchTurn();
-                        restartGame();
-                        m_messages.DisplayTurn(m_game.currentState.playerTurn, m_previousTurn);
-                        continue;
-                    }
-                    break;
-                }
-                moveIlegal = m_game.MakeMove(m_messages.CurrentMove, m_playerTurn);
-                printBoard();
-                if (!moveIlegal)
-                {
-                    m_messages.PrintInvalidLogicInput();
-                    io_keepPlaying = true;
-                    continue;
-                }
-                // is there eating after move
-                if (io_keepPlaying)
-                {
-                    io_keepPlaying = m_game.currentState.IsEatingPossible();
-                    m_messages.PrintExtraTurn();
-                }
-            }
-            // Check if the game has ended
-            if (m_messages.CurrentMove == "Q")
-            {
-                io_finished = m_game.currentState.CheckGameOver(quit);
-            }
-            else
-            {
-                io_finished = m_game.currentState.CheckGameOver(!quit);
-            }
-        }
+        //private void turnPlaying(ref bool io_finished, ref bool io_keepPlaying)
+        //{
+        //    bool moveIlegal;
+        //    bool quit = true;
+        //    while (io_keepPlaying)
+        //    {
+        //        // is there eating before move
+        //        io_keepPlaying = m_game.currentState.IsEatingPossible();
+        //        setUserMove();
+        //        io_finished = checkIfUserQuit();
+        //        if (io_finished)
+        //        {
+        //            m_game.currentState.CheckGameOver(quit);
+        //            switchTurn();
+        //            if (m_playerTurn.getShapeChar() == 'X')
+        //            {
+        //                m_messages.DisplayWinner(m_playerTurn, m_game.currentState.xScore);
+        //            }
+        //            else
+        //            {
+        //                m_messages.DisplayWinner(m_playerTurn, m_game.currentState.oScore);
+        //            }
+        //            if (m_messages.CheckRestartGame())
+        //            {
+        //                io_finished = false;
+        //                io_keepPlaying = true;
+        //                switchTurn();
+        //                restartGame();
+        //                m_messages.DisplayTurn(m_game.currentState.playerTurn, m_previousTurn);
+        //                continue;
+        //            }
+        //            break;
+        //        }
+        //        moveIlegal = m_game.MakeMove(m_messages.CurrentMove, m_playerTurn);
+        //        printBoard();
+        //        if (!moveIlegal)
+        //        {
+        //            m_messages.PrintInvalidLogicInput();
+        //            io_keepPlaying = true;
+        //            continue;
+        //        }
+        //        // is there eating after move
+        //        if (io_keepPlaying)
+        //        {
+        //            io_keepPlaying = m_game.currentState.IsEatingPossible();
+        //            m_messages.PrintExtraTurn();
+        //        }
+        //    }
+        //    // Check if the game has ended
+        //    if (m_messages.CurrentMove == "Q")
+        //    {
+        //        io_finished = m_game.currentState.CheckGameOver(quit);
+        //    }
+        //    else
+        //    {
+        //        io_finished = m_game.currentState.CheckGameOver(!quit);
+        //    }
+        //}
 
         //private bool checkIfUserQuit()
         //{
