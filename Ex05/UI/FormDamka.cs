@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ex05.Logic;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -34,6 +35,47 @@ namespace Ex05.UI
         private void button1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        public void ShowBoard(object[] printableArray , ShapeWrapper i_playarTurn)
+        {
+            int printableArrayCounter = 0;
+
+            enableCurrentPlayerButtons(i_playarTurn);
+
+            for (int i = 0; i < m_BoardSize; i++)
+            {
+                for (int j = 0; j < m_BoardSize; j++)
+                {
+                    if (printableArray[printableArrayCounter].ToString() == i_playarTurn.getShapeChar().ToString())
+                    {
+                        m_ButtonsArray[i, j].Enabled = true;
+                    }
+                    else
+                    {
+                        m_ButtonsArray[i, j].Enabled = false;
+                    }
+                    m_ButtonsArray[i, j].Text = printableArray[printableArrayCounter].ToString();
+                    m_ButtonsArray[i, j].Font = new Font(m_ButtonsArray[i, j].Font, FontStyle.Bold);
+                    printableArrayCounter++;
+                }
+            }
+        }
+
+        private void enableCurrentPlayerButtons(ShapeWrapper i_playarTurn)
+        {
+            if (i_playarTurn.getShapeChar() == 'X')
+            {
+                labelName1.Font = new Font(labelName1.Font, FontStyle.Bold);
+                labelPlayer1.Font = new Font(labelPlayer1.Font, FontStyle.Bold);
+
+            }
+            else
+            {
+                labelName2.Font = new Font(labelName2.Font, FontStyle.Bold);
+                labelPlayer2.Font = new Font(labelPlayer2.Font, FontStyle.Bold);
+
+            }
         }
     }
 }

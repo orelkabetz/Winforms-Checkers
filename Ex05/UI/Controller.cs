@@ -31,79 +31,81 @@ namespace Ex05.UI
             if (m_FormGameSettings.DialogResult == System.Windows.Forms.DialogResult.OK)
             {
                 CreateNewGame(m_FormGameSettings.BoardSize, m_FormGameSettings.PlayerOneName, m_FormGameSettings.PlayerTwoName);
-            }
-
-            m_FormDamka = new FormDamka
+                m_FormDamka = new FormDamka
                 (m_FormGameSettings.BoardSize, m_FormGameSettings.PlayerOneName,
                 m_FormGameSettings.PlayerTwoName, m_FormGameSettings.OneOrTwoPlayers);
-            
-            m_FormDamka.ShowDialog();
 
-            while (!io_finished) 
-            {
-                
-                //turn 1
-                m_messages.DisplayTurn(m_game.currentState.playerTurn, m_previousTurn);
-                turnPlaying(ref io_finished, ref io_keepPlaying);
-                if (io_finished)
-                {
-                    if (m_playerTurn.getShapeChar() == 'X')
-                    {
-                        m_messages.DisplayWinner(m_playerTurn, m_game.currentState.xScore);
-                    }
-                    else
-                    {
-                        m_messages.DisplayWinner(m_playerTurn, m_game.currentState.oScore);
-                    }
-                    if (m_messages.CheckRestartGame())
-                    {
-                        io_finished = false;
-                        io_keepPlaying = true;
-                        restartGame();
-                        continue;
-                    }
-                    break;
-                }
-                //between turn 1 and turn 2
-                switchTurn();
-                //init keepPlaying to true before turn 2
-                io_keepPlaying = true;
 
-                //turn 2
-                m_messages.DisplayTurn(m_game.currentState.playerTurn, m_previousTurn);
-                if (m_messages.OneOrTwoPlayers == 2)
+                //int[,] enables = scan();
+
+                while (!io_finished)
                 {
-                    turnPlaying(ref io_finished, ref io_keepPlaying);
-                }
-                else
-                {
-                    m_game.MakeComputerTurn(ref io_finished, ref io_keepPlaying, out o_moveString);
-                    m_messages.CurrentMove = o_moveString;
+                    //turn 1
                     printBoard();
-                }
-                // finished turn 1 and turn 2 
-                //init keepPlaying to true before turn 1
-                io_keepPlaying = true;
-                switchTurn();
-                if (io_finished)
-                {
-                    if (m_playerTurn.getShapeChar() == 'X')
+
+                    turnPlaying(ref io_finished, ref io_keepPlaying);
+                    if (io_finished)
                     {
-                        m_messages.DisplayWinner(m_playerTurn, m_game.currentState.xScore);
+                        if (m_playerTurn.getShapeChar() == 'X')
+                        {
+                            m_messages.DisplayWinner(m_playerTurn, m_game.currentState.xScore);
+                        }
+                        else
+                        {
+                            m_messages.DisplayWinner(m_playerTurn, m_game.currentState.oScore);
+                        }
+                        if (m_messages.CheckRestartGame())
+                        {
+                            io_finished = false;
+                            io_keepPlaying = true;
+                            restartGame();
+                            continue;
+                        }
+                        break;
+                    }
+                    //between turn 1 and turn 2
+                    switchTurn();
+                    //init keepPlaying to true before turn 2
+                    io_keepPlaying = true;
+
+                    //turn 2
+                    m_messages.DisplayTurn(m_game.currentState.playerTurn, m_previousTurn);
+                    if (m_messages.OneOrTwoPlayers == 2)
+                    {
+                        turnPlaying(ref io_finished, ref io_keepPlaying);
                     }
                     else
                     {
-                        m_messages.DisplayWinner(m_playerTurn, m_game.currentState.oScore);
+                        m_game.MakeComputerTurn(ref io_finished, ref io_keepPlaying, out o_moveString);
+                        m_messages.CurrentMove = o_moveString;
+                        printBoard();
                     }
-                    if (m_messages.CheckRestartGame())
+                    // finished turn 1 and turn 2 
+                    //init keepPlaying to true before turn 1
+                    io_keepPlaying = true;
+                    switchTurn();
+                    if (io_finished)
                     {
-                        io_finished = false;
-                        io_keepPlaying = true;
-                        restartGame();
-                        continue;
+                        if (m_playerTurn.getShapeChar() == 'X')
+                        {
+                            m_messages.DisplayWinner(m_playerTurn, m_game.currentState.xScore);
+                        }
+                        else
+                        {
+                            m_messages.DisplayWinner(m_playerTurn, m_game.currentState.oScore);
+                        }
+                        if (m_messages.CheckRestartGame())
+                        {
+                            io_finished = false;
+                            io_keepPlaying = true;
+                            restartGame();
+                            continue;
+                        }
                     }
                 }
             }
+
+
         }
 
         private void restartGame()
@@ -292,82 +294,10 @@ namespace Ex05.UI
         {
             Screen.Clear();
             object[] printableArray = CreatePrintableArray();
-            string board6 = string.Format(
-@"   A   B   C   D   E   F  
-==========================
-a| {0} | {1} | {2} | {3} | {4} | {5} |
-==========================
-b| {6} | {7} | {8} | {9} | {10} | {11} |
-==========================
-c| {12} | {13} | {14} | {15} | {16} | {17} |
-==========================
-d| {18} | {19} | {20} | {21} | {22} | {23} |
-==========================
-e| {24} | {25} | {26} | {27} | {28} | {29} |
-==========================
-f| {30} | {31} | {32} | {33} | {34} | {35} |
-==========================
-", printableArray);
 
-        string board8 = string.Format(
-@"   A   B   C   D   E   F   G   H  
-==================================
-a| {0} | {1} | {2} | {3} | {4} | {5} | {6} | {7} |
-==================================
-b| {8} | {9} | {10} | {11} | {12} | {13} | {14} | {15} |
-==================================
-c| {16} | {17} | {18} | {19} | {20} | {21} | {22} | {23} |
-==================================
-d| {24} | {25} | {26} | {27} | {28} | {29} | {30} | {31} |
-==================================
-e| {32} | {33} | {34} | {35} | {36} | {37} | {38} | {39} |
-==================================
-f| {40} | {41} | {42} | {43} | {44} | {45} | {46} | {47} |
-==================================
-g| {48} | {49} | {50} | {51} | {52} | {53} | {54} | {55} |
-==================================
-h| {56} | {57} | {58} | {59} | {60} | {61} | {62} | {63} |
-==================================
-", printableArray);
-            string board10 = string.Format(
-@"   A   B   C   D   E   F   G   H   I   J  
-==========================================
-a| {0} | {1} | {2} | {3} | {4} | {5} | {6} | {7} | {8} | {9} |
-==========================================
-b| {10} | {11} | {12} | {13} | {14} | {15} | {16} | {17} | {18} | {19} |
-==========================================
-c| {20} | {21} | {22} | {23} | {24} | {25} | {26} | {27} | {28} | {29} |
-==========================================
-d| {30} | {31} | {32} | {33} | {34} | {35} | {36} | {37} | {38} | {39} |
-==========================================
-e| {40} | {41} | {42} | {43} | {44} | {45} | {46} | {47} | {48} | {49} |
-==========================================
-f| {50} | {51} | {52} | {53} | {54} | {55} | {56} | {57} | {58} | {59} |
-==========================================
-g| {60} | {61} | {62} | {63} | {64} | {65} | {66} | {67} | {68} | {69} |
-==========================================
-h| {70} | {71} | {72} | {73} | {74} | {75} | {76} | {77} | {78} | {79} |
-==========================================
-i| {80} | {81} | {82} | {83} | {84} | {85} | {86} | {87} | {88} | {89} |
-==========================================
-j| {90} | {91} | {92} | {93} | {94} | {95} | {96} | {97} | {98} | {99} |
-==========================================
-", printableArray);
+            m_FormDamka.ShowBoard(printableArray, m_game.currentState.playerTurn);
 
-
-            switch (m_messages.BoardSize)
-            {
-                case 6:
-                    Console.WriteLine(board6);
-                    break;
-                case 8:
-                    Console.WriteLine(board8);
-                    break;
-                case 10:
-                    Console.WriteLine(board10);
-                    break;
-            }
-            //Console.WriteLine(board6);
+            m_FormDamka.ShowDialog();
         }
 
         public object[] CreatePrintableArray()
@@ -375,11 +305,11 @@ j| {90} | {91} | {92} | {93} | {94} | {95} | {96} | {97} | {98} | {99} |
             const int maxSize = 10;
            // object[] o_printableArray = new object[m_messages.BoardSize * m_messages.BoardSize];
             object[] o_printableArray = new object[maxSize * maxSize]; // need to define MAX
-            for (int i = 0; i < m_messages.BoardSize; i++)
+            for (int i = 0; i < m_FormGameSettings.BoardSize; i++)
             {
-                for (int j = 0; j < m_messages.BoardSize; j++)
+                for (int j = 0; j < m_FormGameSettings.BoardSize; j++)
                 {
-                    o_printableArray[i * m_messages.BoardSize + j] = m_game.currentState.BoardArray[i,j].Shape.getShapeChar();
+                    o_printableArray[i * m_FormGameSettings.BoardSize + j] = m_game.currentState.BoardArray[i,j].Shape.getShapeChar();
                 }
             }
             return o_printableArray;

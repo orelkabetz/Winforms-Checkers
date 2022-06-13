@@ -29,6 +29,11 @@ namespace Ex05.UI
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
+        /// 
+        const int width = 50;
+        const int height = 50;
+        const int margin = 20;
+        const int topMargin = 80;
         private void InitializeComponent()
         {
             this.labelPlayer1 = new System.Windows.Forms.Label();
@@ -40,7 +45,7 @@ namespace Ex05.UI
             // labelPlayer1
             // 
             this.labelPlayer1.AutoSize = true;
-            this.labelPlayer1.Location = new System.Drawing.Point(296, 51);
+            this.labelPlayer1.Location = new System.Drawing.Point(60, 40);
             this.labelPlayer1.Name = "labelPlayer1";
             this.labelPlayer1.Size = new System.Drawing.Size(65, 20);
             this.labelPlayer1.TabIndex = 0;
@@ -49,7 +54,7 @@ namespace Ex05.UI
             // labelPlayer2
             // 
             this.labelPlayer2.AutoSize = true;
-            this.labelPlayer2.Location = new System.Drawing.Point(519, 51);
+            this.labelPlayer2.Location = new System.Drawing.Point(340, 40);
             this.labelPlayer2.Name = "labelPlayer2";
             this.labelPlayer2.Size = new System.Drawing.Size(65, 20);
             this.labelPlayer2.TabIndex = 1;
@@ -58,7 +63,7 @@ namespace Ex05.UI
             // labelName1
             // 
             this.labelName1.AutoSize = true;
-            this.labelName1.Location = new System.Drawing.Point(296, 71);
+            this.labelName1.Location = new System.Drawing.Point(60, 60);
             this.labelName1.Name = "labelName1";
             this.labelName1.Size = new System.Drawing.Size(0, 20);
             this.labelName1.TabIndex = 2;
@@ -67,7 +72,7 @@ namespace Ex05.UI
             // labelName2
             // 
             this.labelName2.AutoSize = true;
-            this.labelName2.Location = new System.Drawing.Point(523, 75);
+            this.labelName2.Location = new System.Drawing.Point(340, 60);
             this.labelName2.Name = "labelName2";
             this.labelName2.Size = new System.Drawing.Size(0, 20);
             this.labelName2.TabIndex = 3;
@@ -99,6 +104,7 @@ namespace Ex05.UI
             m_PlayerOneName = i_PlayerOneName;
             m_PlayerTwoName = i_PlayerTwoName;
             m_NumOfPlayers = i_NumOfPlayers;
+            m_ButtonsArray = new Button[m_BoardSize, m_BoardSize];
 
             InitializeComponent();
             SetSize();
@@ -113,49 +119,52 @@ namespace Ex05.UI
 
         private void setButtons()
         {
-            int spacing = 0;
-            int width = 40;
-            int height = 40;
-
-            Button[,] buttonsArray = new Button[m_BoardSize, m_BoardSize];
             for (int i = 0; i < m_BoardSize; i++)
             {
                 for (int j = 0; j < m_BoardSize; j++)
                 {
-                    buttonsArray[i, j] = new Button();
+                    m_ButtonsArray[i, j] = new Button();
                     if (i % 2 == 0)
                     {
                         if (j % 2 == 0)
                         {
-                            buttonsArray[i, j].Enabled = false;
-                            buttonsArray[i, j].BackColor = System.Drawing.Color.Gray;
+                            m_ButtonsArray[i, j].Enabled = false;
+                            m_ButtonsArray[i, j].BackColor = System.Drawing.Color.Gray;
                         }
                         else
                         {
-                            buttonsArray[i, j].BackColor = System.Drawing.Color.White;
+                            m_ButtonsArray[i, j].BackColor = System.Drawing.Color.White;
                         }
                     }
                     else
                     {
                         if (j % 2 == 0)
                         {
-                            buttonsArray[i, j].BackColor = System.Drawing.Color.White;
+                            m_ButtonsArray[i, j].BackColor = System.Drawing.Color.White;
                         }
                         else
                         {
-                            buttonsArray[i, j].Enabled = false;
-                            buttonsArray[i, j].BackColor = System.Drawing.Color.Gray;
+                            m_ButtonsArray[i, j].Enabled = false;
+                            m_ButtonsArray[i, j].BackColor = System.Drawing.Color.Gray;
 
                         }
                     }
-                    buttonsArray[i, j].Width = width;
-                    buttonsArray[i, j].Height = height;
-                    buttonsArray[i, j].Top = (i * height) + 100; // להוסיף קבוע שתלוי בboardsize
-                    buttonsArray[i, j].Left = (j * width) + 100;
+                    m_ButtonsArray[i, j].Width = width;
+                    m_ButtonsArray[i, j].Height = height;
+                    m_ButtonsArray[i, j].Top = (i * height) + topMargin; // להוסיף קבוע שתלוי בboardsize
+                    m_ButtonsArray[i, j].Left = (j * width) + margin;
 
-                    this.Controls.Add(buttonsArray[i, j]);
+                    m_ButtonsArray[i, j].Click += button_Click;
+
+
+                    this.Controls.Add(m_ButtonsArray[i, j]);
                 }
             }
+        }
+
+        private void button_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void setLabels()
@@ -166,17 +175,20 @@ namespace Ex05.UI
 
         private void SetSize()
         {
+            int formWidth = m_BoardSize * width + margin * 2;
+            int formHeight = m_BoardSize * height + margin + topMargin;
+
             if (m_BoardSize == 6)
             {
-                this.ClientSize = new System.Drawing.Size(300, 300);
+                this.ClientSize = new System.Drawing.Size(formWidth, formHeight);
             }
             else if (m_BoardSize == 8)
             {
-                this.ClientSize = new System.Drawing.Size(500, 500);
+                this.ClientSize = new System.Drawing.Size(formWidth, formHeight);
             }
             else
             {
-                this.ClientSize = new System.Drawing.Size(700, 700);
+                this.ClientSize = new System.Drawing.Size(formWidth, formHeight);
             }
         }
 
@@ -190,6 +202,6 @@ namespace Ex05.UI
         private System.Windows.Forms.Label labelPlayer2;
         private System.Windows.Forms.Label labelName1;
         private System.Windows.Forms.Label labelName2;
+        private Button[,] m_ButtonsArray;
     }
-
 }
