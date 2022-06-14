@@ -14,6 +14,10 @@ namespace Ex05.UI
     {
         private ButtonCheckers[,] m_ButtonsArray;
         private string m_currentMove;
+        public string CurrentMove
+        {
+            get { return m_currentMove; }
+        }
         //private string m_previousMove;
         public FormDamka(int i_BoardSize, string i_PlayerOneName, string i_PlayerTwoName, int i_NumOfPlayers)
         {
@@ -21,6 +25,7 @@ namespace Ex05.UI
             m_PlayerOneName = i_PlayerOneName;
             m_PlayerTwoName = i_PlayerTwoName;
             m_NumOfPlayers = i_NumOfPlayers;
+            m_currentMove = "";
             m_ButtonsArray = new ButtonCheckers[m_BoardSize, m_BoardSize];
 
             InitializeComponent();
@@ -118,44 +123,44 @@ namespace Ex05.UI
                 {
                     if (printableArray[printableArrayCounter].ToString() == i_playarTurn.getShapeChar().ToString())
                     {
-                        if((i != 0))
-                        {
-                            if ((j != 0) && (j != m_BoardSize - 1))
-                            {
-                                if ((m_ButtonsArray[i - 1, j + 1].Text == " ") || (m_ButtonsArray[i - 1, j - 1].Text == " "))
-                                {
-                                    m_ButtonsArray[i, j].Enabled = true;
-                                }
-                                else
-                                {
-                                    m_ButtonsArray[i, j].Enabled = false;
-                                }
-                            }
-                            else if (j == 0)
-                            {
-                                if (m_ButtonsArray[i - 1, j + 1].Text == " ")
-                                {
-                                    m_ButtonsArray[i, j].Enabled = true;
-                                }
-                                else
-                                {
-                                    m_ButtonsArray[i, j].Enabled = false;
-                                }
-                            }
-                            else if (j == m_BoardSize - 1)
-                            {
-                                if (m_ButtonsArray[i - 1, j - 1].Text == " ")
-                                {
-                                    m_ButtonsArray[i, j].Enabled = true;
-                                }
-                                else
-                                {
-                                    m_ButtonsArray[i, j].Enabled = false;
-                                }
-                            }
+                        //if((i != 0))
+                        //{
+                        //    if ((j != 0) && (j != m_BoardSize - 1))
+                        //    {
+                        //        if ((m_ButtonsArray[i - 1, j + 1].Text == " ") || (m_ButtonsArray[i - 1, j - 1].Text == " "))
+                        //        {
+                        //            m_ButtonsArray[i, j].Enabled = true;
+                        //        }
+                        //        else
+                        //        {
+                        //            m_ButtonsArray[i, j].Enabled = false;
+                        //        }
+                        //    }
+                        //    else if (j == 0)
+                        //    {
+                        //        if (m_ButtonsArray[i - 1, j + 1].Text == " ")
+                        //        {
+                        //            m_ButtonsArray[i, j].Enabled = true;
+                        //        }
+                        //        else
+                        //        {
+                        //            m_ButtonsArray[i, j].Enabled = false;
+                        //        }
+                        //    }
+                        //    else if (j == m_BoardSize - 1)
+                        //    {
+                        //        if (m_ButtonsArray[i - 1, j - 1].Text == " ")
+                        //        {
+                        //            m_ButtonsArray[i, j].Enabled = true;
+                        //        }
+                        //        else
+                        //        {
+                        //            m_ButtonsArray[i, j].Enabled = false;
+                        //        }
+                        //    }
 
-                        }
-                        //m_ButtonsArray[i, j].Enabled = true;
+                        //}
+                        m_ButtonsArray[i, j].Enabled = true;
                     }
                     else
                     {
@@ -163,20 +168,30 @@ namespace Ex05.UI
                     }
                     m_ButtonsArray[i, j].Text = printableArray[printableArrayCounter].ToString();
                     m_ButtonsArray[i, j].Font = new Font(m_ButtonsArray[i, j].Font, FontStyle.Bold);
-                    m_ButtonsArray[i, j].Click += FormDamka_Click;
+                    m_ButtonsArray[i, j].Click += StartPosition_Click;
+
                     printableArrayCounter++;
                 }
             }
             this.Refresh();
         }
-
-        public void FormDamka_Click(object sender, EventArgs e)
+        public void StartPosition_Click(object sender, EventArgs e)
         {
-            ButtonCheckers clickedButton = sender as ButtonCheckers;
-            m_currentMove += convertIndexToPosition(clickedButton.row, clickedButton.col);
-            m_currentMove += '>';
+            if (m_currentMove.Length < 5)
+            {
+                ButtonCheckers clickedButton = sender as ButtonCheckers;
+                m_currentMove += convertIndexToPosition(clickedButton.row, clickedButton.col);
+                if (m_currentMove.Length == 2)
+                {
+                    m_currentMove += '>';
+                }
+            }
         }
 
+        private void btnExitProgram_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
         private string convertIndexToPosition(int row, int col)
         {
             string resultPosition = "";
@@ -198,6 +213,11 @@ namespace Ex05.UI
                 labelName2.Font = new Font(labelName2.Font, FontStyle.Bold);
                 labelPlayer2.Font = new Font(labelPlayer2.Font, FontStyle.Bold);
             }
+        }
+
+        private void labelPlayer1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

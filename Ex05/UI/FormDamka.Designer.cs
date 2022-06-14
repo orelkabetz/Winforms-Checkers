@@ -50,6 +50,7 @@ namespace Ex05.UI
             this.labelPlayer1.Size = new System.Drawing.Size(65, 20);
             this.labelPlayer1.TabIndex = 0;
             this.labelPlayer1.Text = "Player 1";
+            this.labelPlayer1.Click += new System.EventHandler(this.labelPlayer1_Click);
             // 
             // labelPlayer2
             // 

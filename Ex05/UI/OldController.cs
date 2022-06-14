@@ -41,6 +41,9 @@ namespace Ex05.UI
                 //turn 1
                 m_FormDamka.ShowDialog();
 
+                m_game.currentState.BoardArray[0, 1] = new Piece(new ShapeWrapper('X'));
+
+
                 turnPlaying(ref io_finished, ref io_keepPlaying);
                 if (io_finished)
                 {
@@ -120,7 +123,7 @@ namespace Ex05.UI
             {
                 // is there eating before move
                 io_keepPlaying = m_game.currentState.IsEatingPossible();
-                //setUserMove();
+                setUserMove();
                 //io_finished = checkIfUserQuit();
                 if (io_finished)
                 {
@@ -306,64 +309,62 @@ namespace Ex05.UI
             return o_printableArray;
         }
 
-        //private void setUserMove()
-        //{
-        //   // //m_messages.CurrentMove = Console.ReadLine();
-        //   //// if (!isUserMoveValid(m_messages.CurrentMove))
-        //   // {
-        //   //     while (!isUserMoveValid(m_messages.CurrentMove))
-        //   //     {
-        //   //         Screen.Clear();
-        //   //         printBoard();
-        //   //         System.Console.SetCursorPosition(0, m_messages.BoardSize + 2);
-        //   //         m_messages.PrintInvalidInput();
-        //   //         m_messages.CurrentMove = Console.ReadLine();
-        //   //     }
-        //   // }
-        //}
+        private void setUserMove()
+        {
+            if (!isUserMoveValid(m_FormDamka.CurrentMove))
+            {
+                while (!isUserMoveValid(m_FormDamka.CurrentMove))
+                {
+                    //Screen.Clear();
+                    printBoard();
+                    //System.Console.SetCursorPosition(0, m_FormDamka.BoardSize + 2);
+                    //m_messages.PrintInvalidInput();
+                    //m_messages.CurrentMove = Console.ReadLine();
+                }
+            }
+        }
 
-        //private bool isUserMoveValid(string move) //Not finished!!
-        //{
-        //    // string
-        //    //if (m_messages.CurrentMove == "Q")
-        //    //{
-        //    //    return true;
-        //    //}
-        //    //else if (m_messages.CurrentMove.Length != 5)
-        //    //{
-        //    //    m_messages.PrintInvalidInput();
-        //    //    return false;
-        //    //}
-        //    //else if (m_messages.CurrentMove[2] != '>')
-        //    //{
-        //    //    m_messages.PrintInvalidInput();
-        //    //    return false;
-        //    //}
-        //    //else if ((m_messages.CurrentMove[0] < 'A') || (m_messages.CurrentMove[0] > m_messages.BoardSize + 'A'))
-        //    //{
-        //    //    m_messages.PrintInvalidInput();
-        //    //    return false;
-        //    //}
-        //    //else if ((m_messages.CurrentMove[3] < 'A') || (m_messages.CurrentMove[3] > m_messages.BoardSize + 'A'))
-        //    //{
-        //    //    m_messages.PrintInvalidInput();
-        //    //    return false;
-        //    //}
-        //    //else if ((m_messages.CurrentMove[1] < 'a') || (m_messages.CurrentMove[1] > m_messages.BoardSize + 'a'))
-        //    //{
-        //    //    m_messages.PrintInvalidInput();
-        //    //    return false;
-        //    //}
-        //    //else if ((m_messages.CurrentMove[4] < 'a') || (m_messages.CurrentMove[4] > m_messages.BoardSize + 'a'))
-        //    //{
-        //    //    m_messages.PrintInvalidInput();
-        //    //    return false;
-        //    //}
-        //    //else
-        //    //{
-        //        return true;
-        //    //}
-        //}
+        private bool isUserMoveValid(string move) //Not finished!!
+        {
+            if (m_FormDamka.CurrentMove == "Q")
+            {
+                return true;
+            }
+            else if (m_FormDamka.CurrentMove.Length != 5)
+            {
+                //m_messages.PrintInvalidInput();
+                return false;
+            }
+            else if (m_FormDamka.CurrentMove[2] != '>')
+            {
+                //m_messages.PrintInvalidInput();
+                return false;
+            }
+            else if ((m_FormDamka.CurrentMove[0] < 'A') || (m_FormDamka.CurrentMove[0] > m_FormGameSettings.BoardSize + 'A'))
+            {
+                //m_messages.PrintInvalidInput();
+                return false;
+            }
+            else if ((m_FormDamka.CurrentMove[3] < 'A') || (m_FormDamka.CurrentMove[3] > m_FormGameSettings.BoardSize + 'A'))
+            {
+                //m_messages.PrintInvalidInput();
+                return false;
+            }
+            else if ((m_FormDamka.CurrentMove[1] < 'a') || (m_FormDamka.CurrentMove[1] > m_FormGameSettings.BoardSize + 'a'))
+            {
+                //m_messages.PrintInvalidInput();
+                return false;
+            }
+            else if ((m_FormDamka.CurrentMove[4] < 'a') || (m_FormDamka.CurrentMove[4] > m_FormGameSettings.BoardSize + 'a'))
+            {
+                //m_messages.PrintInvalidInput();
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
 
         private void switchTurn()
         {
