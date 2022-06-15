@@ -14,7 +14,14 @@ namespace Ex05.UI
     {
         Game m_game;
         private ButtonCheckers[,] m_ButtonsArray;
+        //private Label[,] m_LabelsArray;
+        private ButtonCheckers m_StartButton;
+        private ButtonCheckers m_EndButton;
         private string m_currentMove;
+        private ShapeWrapper m_playerTurn;
+        private bool m_Finished = false;
+        private bool m_KeepPlaying = true;
+
         public string CurrentMove
         {
             get { return m_currentMove; }
@@ -28,6 +35,7 @@ namespace Ex05.UI
             m_NumOfPlayers = settings.OneOrTwoPlayers;
             m_currentMove = "";
             m_ButtonsArray = new ButtonCheckers[m_BoardSize, m_BoardSize];
+            m_playerTurn = new ShapeWrapper('X');
 
             InitializeComponent();
             Start();
@@ -83,6 +91,8 @@ namespace Ex05.UI
                     m_ButtonsArray[i, j].Height = height;
                     m_ButtonsArray[i, j].Top = (i * height) + topMargin;
                     m_ButtonsArray[i, j].Left = (j * width) + margin;
+                    m_ButtonsArray[i, j].Click += FormDamkaButton_Click;
+
                     //m_ButtonsArray[i,j].MouseHover += (sender, e) => { m_ButtonsArray[i, j].ForeColor = System.Drawing.Color.Azure; };
                     this.Controls.Add(m_ButtonsArray[i, j]);
                 }
@@ -260,7 +270,6 @@ namespace Ex05.UI
                     }
                     m_ButtonsArray[i, j].Text = printableArray[printableArrayCounter].ToString();
                     m_ButtonsArray[i, j].Font = new Font(m_ButtonsArray[i, j].Font, FontStyle.Bold);
-                    m_ButtonsArray[i, j].Click += FormDamka_Click;
 
                     printableArrayCounter++;
                 }
@@ -268,26 +277,116 @@ namespace Ex05.UI
             //this.Refresh();
         }
 
-        public void FormDamka_Click(object sender, EventArgs e)
+        public void FormDamkaButton_Click(object sender, EventArgs e)
         {
-            if (m_currentMove.Length < 5)
+            ButtonCheckers clickedButton = sender as ButtonCheckers;
+
+            if (m_StartButton == null)
             {
-                ButtonCheckers clickedButton = sender as ButtonCheckers;
-                m_currentMove += convertIndexToPosition(clickedButton.row, clickedButton.col);
-                if (m_currentMove.Length == 2)
+                m_StartButton = clickedButton;
+                clickedButton.BackColor = Color.DeepSkyBlue;
+                enbaleAllButtons();
+            }
+            else if (m_EndButton == null)
+            {
+                m_StartButton.BackColor = Color.White;
+                m_EndButton = clickedButton;
+                m_currentMove += convertIndexToPosition(m_StartButton.row, m_StartButton.col);
+                m_currentMove += '>';
+                m_currentMove += convertIndexToPosition(m_EndButton.row, m_EndButton.col);
+                m_StartButton = null;
+                m_EndButton = null;
+                turnPlaying();
+            }    
+        }
+
+        private void turnPlaying()
+        {
+            bool moveIlegal;
+            bool quit = true;
+            bool keepPlaying = true;
+            while (keepPlaying)
+            {
+                // is there eating before move
+                keepPlaying = m_game.currentState.IsEatingPossible();
+                if (m_Finished)
                 {
-                    m_currentMove += '>';
+                    m_game.currentState.CheckGameOver(quit);
+                    switchTurn();
+                    //if (m_playerTurn.getShapeChar() == 'X')
+                    //{
+                    //    //m_messages.DisplayWinner(m_playerTurn, m_game.currentState.xScore);
+                    //}
+                    //else
+                    //{
+                    //    //m_messages.DisplayWinner(m_playerTurn, m_game.currentState.oScore);
+                    //}
+                    //if (m_messages.CheckRestartGame())
+                    //{
+                    //    io_finished = false;
+                    //    io_keepPlaying = true;
+                    //    switchTurn();
+                    //    restartGame();
+                    //    m_messages.DisplayTurn(m_game.currentState.playe rTurn, m_previousTurn);
+                    //    continue;
+                    //}
+                    break;
                 }
+                moveIlegal = m_game.MakeMove(CurrentMove, m_playerTurn);
+                printBoard();
+                if (!moveIlegal)
+                {
+                    m_currentMove = "";
+                    m_StartButton = null;
+                    m_EndButton = null;
+                    MessageBox.Show("Ilegel Move!");
+                    //m_messages.PrintInvalidLogicInput();
+                    keepPlaying = true;
+                    return ;
+                }
+                // is there eating after move
+                if (keepPlaying)
+                {
+                    m_currentMove = "";
+                    m_StartButton = null;
+                    m_EndButton = null;
+                    keepPlaying = m_game.currentState.IsEatingPossible();
+                    if (keepPlaying)
+                    {
+                        switchTurn();
+                        MessageBox.Show("You have another Turn!");
+                    }
+                }
+            }
+            // Check if the game has ended
+            switchTurn();
+            m_currentMove = "";
+            printBoard();
+            m_Finished = m_game.currentState.CheckGameOver(!quit);
+        }
+
+        private void switchTurn()
+        {
+            if (m_playerTurn.getShapeChar() == 'X')
+            {
+                m_playerTurn.Shape = ShapeWrapper.eShape.O;
             }
             else
             {
-                //disable other buttons
+                m_playerTurn.Shape = ShapeWrapper.eShape.X;
             }
+            m_game.currentState.SwitchTurn();
         }
 
-        private void btnExitProgram_Click(object sender, EventArgs e)
+        private void enbaleAllButtons()
         {
-            this.Close();
+            for (int i = 0; i < m_BoardSize; i++)
+            {
+                for (int j = 0; j < m_BoardSize; j++)
+                {
+                    m_ButtonsArray[i, j].Enabled = true;
+                }
+            }
         }
 
         private string convertIndexToPosition(int row, int col)

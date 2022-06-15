@@ -1,6 +1,5 @@
 ﻿using System;
 using Ex05.Logic;
-using Ex02.ConsoleUtils;
 
 using Ex05.UI;
 
