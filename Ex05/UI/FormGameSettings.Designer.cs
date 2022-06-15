@@ -186,7 +186,6 @@
         private System.Windows.Forms.RadioButton radioButton10;
         private System.Windows.Forms.RadioButton radioButton8;
         private System.Windows.Forms.RadioButton radioButton6;
-        public int BoardSize;
         private System.Windows.Forms.Label labelBoardSize;
     }
 }

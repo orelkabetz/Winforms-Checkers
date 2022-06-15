@@ -11,6 +11,11 @@ namespace Ex05.UI
 {
     public partial class FormGameSettings : Form
     {
+        public int BoardSize;
+        public Settings Settings
+        {
+            get { return new Settings(BoardSize, PlayerOneName, PlayerTwoName, OneOrTwoPlayers ); }
+        }
         public FormGameSettings()
         {
             InitializeComponent();
