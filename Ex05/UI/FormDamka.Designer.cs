@@ -30,10 +30,10 @@ namespace Ex05.UI
         /// the contents of this method with the code editor.
         /// </summary>
         /// 
-        const int width = 50;
-        const int height = 50;
-        const int margin = 20;
-        const int topMargin = 80;
+        const int k_Width = 50;
+        const int k_Height = 50;
+        const int k_Margin = 20;
+        const int k_TopMargin = 80;
         private void InitializeComponent()
         {
             this.labelPlayer1 = new System.Windows.Forms.Label();
@@ -50,7 +50,6 @@ namespace Ex05.UI
             this.labelPlayer1.Size = new System.Drawing.Size(65, 20);
             this.labelPlayer1.TabIndex = 0;
             this.labelPlayer1.Text = "Player 1";
-            this.labelPlayer1.Click += new System.EventHandler(this.labelPlayer1_Click);
             // 
             // labelPlayer2
             // 
@@ -68,7 +67,6 @@ namespace Ex05.UI
             this.labelName1.Name = "labelName1";
             this.labelName1.Size = new System.Drawing.Size(0, 20);
             this.labelName1.TabIndex = 2;
-            this.labelName1.Click += new System.EventHandler(this.label1_Click);
             // 
             // labelName2
             // 
@@ -77,7 +75,6 @@ namespace Ex05.UI
             this.labelName2.Name = "labelName2";
             this.labelName2.Size = new System.Drawing.Size(0, 20);
             this.labelName2.TabIndex = 3;
-            this.labelName2.Click += new System.EventHandler(this.label1_Click_1);
             // 
             // FormDamka
             // 
@@ -91,45 +88,17 @@ namespace Ex05.UI
             this.Name = "FormDamka";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Damka";
-            this.Load += new System.EventHandler(this.FormDamka_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void FormDamka_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label1_Click_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-        }
-
 
         public FormDamka()
         {
             InitializeComponent();
         }
 
-
         #endregion
 
-        private int m_BoardSize;
-        private string m_PlayerOneName;
-        private string m_PlayerTwoName;
-        private int m_NumOfPlayers;
         private System.Windows.Forms.Label labelPlayer1;
         private System.Windows.Forms.Label labelPlayer2;
         private System.Windows.Forms.Label labelName1;

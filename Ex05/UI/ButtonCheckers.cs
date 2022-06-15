@@ -8,14 +8,14 @@ namespace Ex05.UI
 {
     public class ButtonCheckers : Button
     {
-        public ButtonCheckers(int i_row, int i_col)
+        public ButtonCheckers(int i_Row, int i_Col)
         {
-            row = i_row;
-            col = i_col;
+            Row = i_Row;
+            Col = i_Col;
         }
-        public int row
+        public int Row
         { get; }
-        public int col
+        public int Col
         { get; }
     }
 }

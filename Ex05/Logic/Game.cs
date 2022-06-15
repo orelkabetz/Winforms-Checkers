@@ -19,16 +19,16 @@ namespace Ex05.Logic
             m_currentState = new GameState(boardSize);
         }
 
-        public bool MakeMove(string m_currentMove, ShapeWrapper playerTurn)
+        public bool MakeMove(string i_CurrentMove, ShapeWrapper i_PlayerTurn)
         {
             Move currentMove;
             if (m_currentState.playerTurn.getShapeChar() == 'X')
             {
-                currentMove = new Move(m_currentMove);
+                currentMove = new Move(i_CurrentMove);
             }
             else
             {
-                currentMove = new Move(m_currentMove);
+                currentMove = new Move(i_CurrentMove);
             }
             if (m_currentState.CheckMove(currentMove))
             {
@@ -83,14 +83,14 @@ namespace Ex05.Logic
                 
         }
 
-        private string moveToString(Move move)
+        private string moveToString(Move i_Move)
         {
             StringBuilder moveString = new StringBuilder();
-            moveString.Append(Convert.ToChar(move.startPosition.Col + 'A'));
-            moveString.Append(Convert.ToChar(move.startPosition.Row + 'a'));
+            moveString.Append(Convert.ToChar(i_Move.startPosition.Col + 'A'));
+            moveString.Append(Convert.ToChar(i_Move.startPosition.Row + 'a'));
             moveString.Append('>');
-            moveString.Append(Convert.ToChar(move.endPosition.Col + 'A'));
-            moveString.Append(Convert.ToChar(move.endPosition.Row + 'a'));
+            moveString.Append(Convert.ToChar(i_Move.endPosition.Col + 'A'));
+            moveString.Append(Convert.ToChar(i_Move.endPosition.Row + 'a'));
             return moveString.ToString();
         }
     }

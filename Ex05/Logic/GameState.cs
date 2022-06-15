@@ -72,19 +72,19 @@ namespace Ex05.Logic
             }
         }
 
-        public bool CheckMove(Move currentMove)
+        public bool CheckMove(Move i_CurrentMove)
         {
             // Check if the start or end position is in the same row/col - not possible
-            if ((currentMove.startPosition.Row == currentMove.endPosition.Row)
-                || (currentMove.startPosition.Col == currentMove.endPosition.Col))
+            if ((i_CurrentMove.startPosition.Row == i_CurrentMove.endPosition.Row)
+                || (i_CurrentMove.startPosition.Col == i_CurrentMove.endPosition.Col))
             {
                 return false;
             }
-            if(!isStartPositionValid(currentMove)) 
+            if(!isStartPositionValid(i_CurrentMove)) 
             {
                 return false;
             }
-            if (!isEndPositionValid(currentMove))
+            if (!isEndPositionValid(i_CurrentMove))
             {
                 return false;
             }
@@ -186,53 +186,53 @@ namespace Ex05.Logic
             }
         }
 
-        public void PlayMove(Move currentMove)
+        public void PlayMove(Move i_CurrentMove)
         {
             int eatenRow;
             int eatenCol;
-            char temp = m_boardArray[currentMove.startPosition.Row, currentMove.startPosition.Col].Shape.getShapeChar();
-            m_boardArray[currentMove.startPosition.Row, currentMove.startPosition.Col].Shape = new ShapeWrapper(' ');
-            m_boardArray[currentMove.endPosition.Row, currentMove.endPosition.Col].Shape = new ShapeWrapper(temp);
+            char temp = m_boardArray[i_CurrentMove.startPosition.Row, i_CurrentMove.startPosition.Col].Shape.getShapeChar();
+            m_boardArray[i_CurrentMove.startPosition.Row, i_CurrentMove.startPosition.Col].Shape = new ShapeWrapper(' ');
+            m_boardArray[i_CurrentMove.endPosition.Row, i_CurrentMove.endPosition.Col].Shape = new ShapeWrapper(temp);
             if (temp == 'K')
             {
-                m_boardArray[currentMove.endPosition.Row, currentMove.endPosition.Col].IsKing = true;
+                m_boardArray[i_CurrentMove.endPosition.Row, i_CurrentMove.endPosition.Col].IsKing = true;
             }
-            if (Math.Abs(currentMove.startPosition.Row-currentMove.endPosition.Row) == 2)
+            if (Math.Abs(i_CurrentMove.startPosition.Row-i_CurrentMove.endPosition.Row) == 2)
             {
-                eatenRow = (currentMove.startPosition.Row + currentMove.endPosition.Row) / 2;
-                eatenCol = (currentMove.startPosition.Col + currentMove.endPosition.Col) / 2;
+                eatenRow = (i_CurrentMove.startPosition.Row + i_CurrentMove.endPosition.Row) / 2;
+                eatenCol = (i_CurrentMove.startPosition.Col + i_CurrentMove.endPosition.Col) / 2;
                 m_boardArray[eatenRow, eatenCol].Shape = new ShapeWrapper(' ');
             }
-            updateKing(currentMove);
+            updateKing(i_CurrentMove);
         }
 
-        private void updateKing(Move currentMove)
+        private void updateKing(Move i_CurrentMove)
         {
             if (m_playerTurn.getShapeChar() == 'X')
             {
-                if (currentMove.endPosition.Row == 0)
+                if (i_CurrentMove.endPosition.Row == 0)
                 {
-                    m_boardArray[currentMove.endPosition.Row,currentMove.endPosition.Col].Shape = new ShapeWrapper('K');
-                    m_boardArray[currentMove.endPosition.Row, currentMove.endPosition.Col].IsKing = true;
+                    m_boardArray[i_CurrentMove.endPosition.Row,i_CurrentMove.endPosition.Col].Shape = new ShapeWrapper('K');
+                    m_boardArray[i_CurrentMove.endPosition.Row, i_CurrentMove.endPosition.Col].IsKing = true;
                 }
             }
             else // 'O'
             {
-                if (currentMove.endPosition.Row == m_boardSize-1)
+                if (i_CurrentMove.endPosition.Row == m_boardSize-1)
                 {
-                    m_boardArray[currentMove.endPosition.Row, currentMove.endPosition.Col].Shape = new ShapeWrapper('U');
-                    m_boardArray[currentMove.endPosition.Row, currentMove.endPosition.Col].IsKing = true;
+                    m_boardArray[i_CurrentMove.endPosition.Row, i_CurrentMove.endPosition.Col].Shape = new ShapeWrapper('U');
+                    m_boardArray[i_CurrentMove.endPosition.Row, i_CurrentMove.endPosition.Col].IsKing = true;
                 }
             }
 
         }
 
-        public bool CheckGameOver(bool isOver)
+        public bool CheckGameOver(bool i_IsOver)
         {
-            return checkWin(!isOver);
+            return checkWin(!i_IsOver);
         }
 
-        private bool checkWin(bool quit)
+        private bool checkWin(bool i_IsOver)
         {
             // if winner is X winnerShape = 'X' , else if winner is O winnerShape is '0' ,else (no winner) winnerShape = ' '
             bool xExists = false;
@@ -277,7 +277,7 @@ namespace Ex05.Logic
                 m_oScore += oScore;
                 return oExists;
             }
-            else if ((xExists && oExists)&&quit)
+            else if ((xExists && oExists)&&i_IsOver)
             {
                 m_xScore += xScore;
                 m_oScore += oScore;
@@ -286,9 +286,9 @@ namespace Ex05.Logic
             return false;
         }
 
-        private bool isStartPositionValid(Move currentMove)
+        private bool isStartPositionValid(Move i_CurrentMove)
         {
-            char startPositionShape = m_boardArray[currentMove.startPosition.Row, currentMove.startPosition.Col].Shape.getShapeChar();
+            char startPositionShape = m_boardArray[i_CurrentMove.startPosition.Row, i_CurrentMove.startPosition.Col].Shape.getShapeChar();
             if (startPositionShape == 'K')
             {
                 startPositionShape = 'X';
@@ -304,45 +304,45 @@ namespace Ex05.Logic
             return true;
         }
 
-        private bool isEndPositionValid(Move currentMove)
+        private bool isEndPositionValid(Move i_CurrentMove)
         {
             bool isEndPositionLegal = true;
             
-            if (!isEndPositionEmpty(currentMove))
+            if (!isEndPositionEmpty(i_CurrentMove))
             {
                 return false;
             }
-            if (!insideTheBoard(currentMove))
+            if (!insideTheBoard(i_CurrentMove))
             {
                 return false;
             }
             if (m_playerTurn.getShapeChar() == 'X')
             {
-                if (!isDiagonalDown(currentMove,1))
+                if (!isDiagonalDown(i_CurrentMove,1))
                 {
                     isEndPositionLegal = false;
                 }
             }
             else
             { 
-                if (!isDiagonalUp(currentMove,1))
+                if (!isDiagonalUp(i_CurrentMove,1))
                 {
                     isEndPositionLegal = false;
                 }
             }
-            if (m_boardArray[currentMove.startPosition.Row, currentMove.startPosition.Col].IsKing)
+            if (m_boardArray[i_CurrentMove.startPosition.Row, i_CurrentMove.startPosition.Col].IsKing)
             {
                 isEndPositionLegal = true;
                 if (m_playerTurn.getShapeChar() == 'X')
                 {
-                    if (!isDiagonalUp(currentMove,1))
+                    if (!isDiagonalUp(i_CurrentMove,1))
                     {
                         isEndPositionLegal = false;
                     }
                 }
                 else // 'O'
                 {
-                    if (!isDiagonalDown(currentMove,1))
+                    if (!isDiagonalDown(i_CurrentMove,1))
                     {
                         isEndPositionLegal = false;
                     }
@@ -351,9 +351,9 @@ namespace Ex05.Logic
             return isEndPositionLegal;
         }
 
-        private bool isEndPositionEmpty(Move currentMove)
+        private bool isEndPositionEmpty(Move i_CurrentMove)
         {
-            char endPositionShape = m_boardArray[currentMove.endPosition.Row, currentMove.endPosition.Col].Shape.getShapeChar();
+            char endPositionShape = m_boardArray[i_CurrentMove.endPosition.Row, i_CurrentMove.endPosition.Col].Shape.getShapeChar();
 
             if (endPositionShape != ' ')
             {
@@ -363,84 +363,84 @@ namespace Ex05.Logic
             return true;
         }
 
-        private bool insideTheBoard(Move currentMove)
+        private bool insideTheBoard(Move i_CurrentMove)
         {
             bool isStartPositionLegal = true;
             bool isEndPositionLegal = true;
-            if (currentMove.startPosition.Row < 0 || currentMove.startPosition.Row >= m_boardSize)
+            if (i_CurrentMove.startPosition.Row < 0 || i_CurrentMove.startPosition.Row >= m_boardSize)
             {
                 isStartPositionLegal = false;
             }
-            if (currentMove.startPosition.Col < 0 || currentMove.startPosition.Col >= m_boardSize)
+            if (i_CurrentMove.startPosition.Col < 0 || i_CurrentMove.startPosition.Col >= m_boardSize)
             {
                 isStartPositionLegal = false;
             }
-            if (currentMove.endPosition.Row < 0 || currentMove.endPosition.Row >= m_boardSize)
+            if (i_CurrentMove.endPosition.Row < 0 || i_CurrentMove.endPosition.Row >= m_boardSize)
             {
                 isEndPositionLegal = false;
             }
-            if (currentMove.endPosition.Col < 0 || currentMove.endPosition.Col >= m_boardSize)
+            if (i_CurrentMove.endPosition.Col < 0 || i_CurrentMove.endPosition.Col >= m_boardSize)
             {
                 isEndPositionLegal = false;
             }
             return isStartPositionLegal && isEndPositionLegal;
         }
 
-        private bool isDiagonalDown(Move currentMove, int stepSize)
+        private bool isDiagonalDown(Move i_CurrentMove, int i_StepSize)
         {
-            if (stepSize == 1)
+            if (i_StepSize == 1)
             {
                 if (IsEatingPossible())
                 {
-                    return checkIfPlayerMoveEating(currentMove);
+                    return checkIfPlayerMoveEating(i_CurrentMove);
                 }
             }
             
-            if (currentMove.startPosition.Row != (currentMove.endPosition.Row + stepSize))
+            if (i_CurrentMove.startPosition.Row != (i_CurrentMove.endPosition.Row + i_StepSize))
             {
                 return false;
             }
-            else if (!(currentMove.startPosition.Col != (currentMove.endPosition.Col - stepSize))
-                && !(currentMove.startPosition.Col != (currentMove.endPosition.Col + stepSize)))
+            else if (!(i_CurrentMove.startPosition.Col != (i_CurrentMove.endPosition.Col - i_StepSize))
+                && !(i_CurrentMove.startPosition.Col != (i_CurrentMove.endPosition.Col + i_StepSize)))
             {
                 return false;
             }
             return true;
         }
 
-        private bool isDiagonalUp(Move currentMove, int stepSize)
+        private bool isDiagonalUp(Move i_CurrentMove, int i_StepSize)
         {
-            if (stepSize == 1)
+            if (i_StepSize == 1)
             {
                 if (IsEatingPossible())
                 {
-                    return checkIfPlayerMoveEating(currentMove);
+                    return checkIfPlayerMoveEating(i_CurrentMove);
                 }
             }
-            if (currentMove.startPosition.Row != (currentMove.endPosition.Row - stepSize))
+            if (i_CurrentMove.startPosition.Row != (i_CurrentMove.endPosition.Row - i_StepSize))
             {
                 return false;
             }
-            else if (!(currentMove.startPosition.Col != (currentMove.endPosition.Col - stepSize))
-                && !(currentMove.startPosition.Col != (currentMove.endPosition.Col + stepSize)))
+            else if (!(i_CurrentMove.startPosition.Col != (i_CurrentMove.endPosition.Col - i_StepSize))
+                && !(i_CurrentMove.startPosition.Col != (i_CurrentMove.endPosition.Col + i_StepSize)))
             {
                 return false;
             }
             return true;
         }
 
-        private bool checkIfPlayerMoveEating(Move currentMove)
+        private bool checkIfPlayerMoveEating(Move i_CurrentMove)
         {
             //Checking if move is eating
             bool isEating = false;
 
-            int eatenRow = (currentMove.startPosition.Row + currentMove.endPosition.Row) /2;
-            int eatenCol = (currentMove.startPosition.Col + currentMove.endPosition.Col) / 2;
+            int eatenRow = (i_CurrentMove.startPosition.Row + i_CurrentMove.endPosition.Row) /2;
+            int eatenCol = (i_CurrentMove.startPosition.Col + i_CurrentMove.endPosition.Col) / 2;
             // check regular eating
             //check if between there is opponnent
             if (m_playerTurn.getShapeChar() == 'X')
             {
-                if (isDiagonalDown(currentMove, 2))
+                if (isDiagonalDown(i_CurrentMove, 2))
                 {
                     if ((m_boardArray[eatenRow,eatenCol].Shape.getShapeChar() == 'O')|| (m_boardArray[eatenRow, eatenCol].Shape.getShapeChar() == 'U'))
                     isEating = true;
@@ -448,7 +448,7 @@ namespace Ex05.Logic
             }
             else // 'O'
             {
-                if (isDiagonalUp(currentMove, 2))
+                if (isDiagonalUp(i_CurrentMove, 2))
                 {
                     if ((m_boardArray[eatenRow, eatenCol].Shape.getShapeChar() == 'X')|| m_boardArray[eatenRow, eatenCol].Shape.getShapeChar() == 'K')
                     isEating = true;
@@ -456,11 +456,11 @@ namespace Ex05.Logic
             }
             //check is king
             // check king eating
-            if (m_boardArray[currentMove.startPosition.Row,currentMove.startPosition.Col].IsKing)
+            if (m_boardArray[i_CurrentMove.startPosition.Row,i_CurrentMove.startPosition.Col].IsKing)
             {
                 if (m_playerTurn.getShapeChar() == 'X')
                 {
-                    if (isDiagonalUp(currentMove, 2))
+                    if (isDiagonalUp(i_CurrentMove, 2))
                     {
                         if (m_boardArray[eatenRow, eatenCol].Shape.getShapeChar() == 'O'|| m_boardArray[eatenRow, eatenCol].Shape.getShapeChar() == 'U')
                             isEating = true;
@@ -468,7 +468,7 @@ namespace Ex05.Logic
                 }
                 else // 'O'
                 {
-                    if (isDiagonalDown(currentMove, 2))
+                    if (isDiagonalDown(i_CurrentMove, 2))
                     {
                         if (m_boardArray[eatenRow, eatenCol].Shape.getShapeChar() == 'X' || m_boardArray[eatenRow, eatenCol].Shape.getShapeChar() == 'K')
                             isEating = true;
