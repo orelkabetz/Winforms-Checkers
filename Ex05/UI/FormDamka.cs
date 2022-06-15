@@ -21,6 +21,9 @@ namespace Ex05.UI
         private ShapeWrapper m_playerTurn;
         private bool m_Finished = false;
         private bool m_KeepPlaying = true;
+        private int xScore = 0;
+        private int oScore = 0;
+
 
         public string CurrentMove
         {
@@ -102,7 +105,15 @@ namespace Ex05.UI
         private void setLabels()
         {
             labelName1.Text = m_PlayerOneName + ":";
-            labelName2.Text = m_PlayerTwoName + ":";
+            if (m_NumOfPlayers == 2)
+            {
+                labelName2.Text = m_PlayerTwoName + ":";
+            }
+            else // 1
+            {
+                labelName2.Text =  "Computer:";
+
+            }
         }
 
         private void SetSize()
@@ -448,8 +459,10 @@ namespace Ex05.UI
                MessageBoxButtons.YesNo,
                MessageBoxIcon.Information);
 
-                labelName1.Text += m_game.currentState.xScore.ToString();
-                labelName2.Text += m_game.currentState.oScore.ToString();
+                xScore += m_game.currentState.xScore;
+                oScore += m_game.currentState.oScore;
+                labelName1.Text = m_PlayerOneName + ":" + xScore.ToString();
+                labelName2.Text = m_PlayerOneName + ":" + oScore.ToString();
 
                 if (result == DialogResult.Yes)
                 {
