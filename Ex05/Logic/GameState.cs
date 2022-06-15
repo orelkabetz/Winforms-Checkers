@@ -227,9 +227,9 @@ namespace Ex05.Logic
 
         }
 
-        public bool CheckGameOver(bool quit)
+        public bool CheckGameOver(bool isOver)
         {
-            return checkWin(quit);
+            return checkWin(!isOver);
         }
 
         private bool checkWin(bool quit)

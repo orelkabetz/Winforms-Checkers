@@ -250,7 +250,7 @@ namespace Ex05.UI
             return o_printableArray;
         }
 
-        public void ShowBoard(object[] printableArray , ShapeWrapper i_playarTurn)
+        public void ShowBoard(object[] printableArray, ShapeWrapper i_playarTurn)
         {
             int printableArrayCounter = 0;
 
@@ -260,13 +260,27 @@ namespace Ex05.UI
             {
                 for (int j = 0; j < m_BoardSize; j++)
                 {
-                    if (printableArray[printableArrayCounter].ToString() == i_playarTurn.getShapeChar().ToString())
-                    {               
-                        m_ButtonsArray[i, j].Enabled = true;
-                    }
-                    else
+                    if (i_playarTurn.getShapeChar() == 'X')
                     {
-                        m_ButtonsArray[i, j].Enabled = false;
+                        if ((printableArray[printableArrayCounter].ToString() == "X") || (printableArray[printableArrayCounter].ToString() == "K"))
+                        {
+                            m_ButtonsArray[i, j].Enabled = true;
+                        }
+                        else
+                        {
+                            m_ButtonsArray[i, j].Enabled = false;
+                        }
+                    }
+                    else // Player O
+                    {
+                        if ((printableArray[printableArrayCounter].ToString() == "O") || (printableArray[printableArrayCounter].ToString() == "U"))
+                        {
+                            m_ButtonsArray[i, j].Enabled = true;
+                        }
+                        else
+                        {
+                            m_ButtonsArray[i, j].Enabled = false;
+                        }
                     }
                     m_ButtonsArray[i, j].Text = printableArray[printableArrayCounter].ToString();
                     m_ButtonsArray[i, j].Font = new Font(m_ButtonsArray[i, j].Font, FontStyle.Bold);
@@ -274,7 +288,7 @@ namespace Ex05.UI
                     printableArrayCounter++;
                 }
             }
-            //this.Refresh();
+            this.Refresh();
         }
 
         public void FormDamkaButton_Click(object sender, EventArgs e)
@@ -296,42 +310,89 @@ namespace Ex05.UI
                 m_currentMove += convertIndexToPosition(m_EndButton.row, m_EndButton.col);
                 m_StartButton = null;
                 m_EndButton = null;
-                turnPlaying();
-            }    
+                if (m_playerTurn.getShapeChar() == 'X')
+                {
+                    turnPlaying();
+                    this.Refresh();
+                }
+                if (m_playerTurn.getShapeChar() == 'O')
+                {
+                    if (m_NumOfPlayers == 2)
+                    {
+                        turnPlaying();
+                    }
+                    if (checkGameOver())
+                    {
+                        if (calculateWin())
+                            return;
+                    }
+                    else // 1 player
+                    {
+                        bool KeepPlaying = true;
+                        string o_moveString;
+
+                        m_game.MakeComputerTurn(ref m_Finished, ref KeepPlaying, out o_moveString);
+
+                        m_currentMove = o_moveString;
+                        //turnPlaying();
+
+                        switchTurn();
+                        m_currentMove = "";
+                        printBoard();
+
+                    }
+                    if (checkGameOver())
+                    {
+                        calculateWin();
+                        return;
+                    }
+                }
+            }
+        }
+
+        private bool checkGameOver()
+        {
+            bool res = true;
+            bool xExists = false;
+            bool oExists = false;
+
+            for (int i = 0; i < m_BoardSize; i++)
+            {
+                for (int j = 0; j < m_BoardSize; j++)
+                {
+                    if (m_ButtonsArray[i, j].Text == "X")
+                    {
+                        xExists = true;
+                    }
+                    else if (m_ButtonsArray[i, j].Text == "K")
+                    {
+                        xExists = true;
+                    }
+                    else if (m_ButtonsArray[i, j].Text == "O")
+                    {
+                        oExists = true;
+                    }
+                    else if (m_ButtonsArray[i, j].Text == "U")
+                    {
+                        oExists = true;
+                    }
+                }
+            }
+            res = (!(xExists) || !(oExists));
+
+            return res;
         }
 
         private void turnPlaying()
         {
             bool moveIlegal;
-            bool quit = true;
+            bool isOver = false;
             bool keepPlaying = true;
             while (keepPlaying)
             {
                 // is there eating before move
                 keepPlaying = m_game.currentState.IsEatingPossible();
-                if (m_Finished)
-                {
-                    m_game.currentState.CheckGameOver(quit);
-                    switchTurn();
-                    //if (m_playerTurn.getShapeChar() == 'X')
-                    //{
-                    //    //m_messages.DisplayWinner(m_playerTurn, m_game.currentState.xScore);
-                    //}
-                    //else
-                    //{
-                    //    //m_messages.DisplayWinner(m_playerTurn, m_game.currentState.oScore);
-                    //}
-                    //if (m_messages.CheckRestartGame())
-                    //{
-                    //    io_finished = false;
-                    //    io_keepPlaying = true;
-                    //    switchTurn();
-                    //    restartGame();
-                    //    m_messages.DisplayTurn(m_game.currentState.playe rTurn, m_previousTurn);
-                    //    continue;
-                    //}
-                    break;
-                }
+
                 moveIlegal = m_game.MakeMove(CurrentMove, m_playerTurn);
                 printBoard();
                 if (!moveIlegal)
@@ -342,7 +403,7 @@ namespace Ex05.UI
                     MessageBox.Show("Ilegel Move!");
                     //m_messages.PrintInvalidLogicInput();
                     keepPlaying = true;
-                    return ;
+                    return;
                 }
                 // is there eating after move
                 if (keepPlaying)
@@ -355,6 +416,7 @@ namespace Ex05.UI
                     {
                         switchTurn();
                         MessageBox.Show("You have another Turn!");
+                        break;
                     }
                 }
             }
@@ -362,7 +424,52 @@ namespace Ex05.UI
             switchTurn();
             m_currentMove = "";
             printBoard();
-            m_Finished = m_game.currentState.CheckGameOver(!quit);
+        }
+
+        private bool calculateWin()
+        {
+            bool isOver = false;
+            bool res = false;
+            m_game.currentState.CheckGameOver(!isOver);
+
+            string winnerName;
+            
+                if (m_game.currentState.playerTurn.getShapeChar() != 'O')
+                {
+                    winnerName = m_PlayerTwoName;
+                }
+                else // 'X'
+                {
+                    winnerName = m_PlayerOneName;
+                }
+                DialogResult result = MessageBox.Show(
+               string.Format("{0} Won!{1}Another round?", winnerName, Environment.NewLine),
+               "Round Over",
+               MessageBoxButtons.YesNo,
+               MessageBoxIcon.Information);
+
+                labelName1.Text += m_game.currentState.xScore.ToString();
+                labelName2.Text += m_game.currentState.oScore.ToString();
+
+                if (result == DialogResult.Yes)
+                {
+                    Restart();
+                }
+                else
+                {
+                    this.Close();
+                }
+                res = true;
+                //switchTurn();
+            
+            return res;
+        }
+
+        private void Restart()
+        {
+            CreateNewGame(m_BoardSize, m_PlayerOneName, m_PlayerTwoName);
+            printBoard();
+            m_playerTurn = new ShapeWrapper('X');
         }
 
         private void switchTurn()
@@ -384,7 +491,10 @@ namespace Ex05.UI
             {
                 for (int j = 0; j < m_BoardSize; j++)
                 {
-                    m_ButtonsArray[i, j].Enabled = true;
+                    if (m_ButtonsArray[i, j].BackColor == Color.White)
+                    {
+                        m_ButtonsArray[i, j].Enabled = true;
+                    }
                 }
             }
         }

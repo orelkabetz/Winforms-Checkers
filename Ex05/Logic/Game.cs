@@ -55,7 +55,7 @@ namespace Ex05.Logic
             }
             o_moveString = o_localMoveString;
             // Check if the game has ended
-            io_finished = currentState.CheckGameOver(!quit);
+            io_finished = false;
         } 
         
         private void makeComputerMove(out string o_moveString)
@@ -79,7 +79,7 @@ namespace Ex05.Logic
             {
                 o_moveString = "No possible move";
             }
-            System.Threading.Thread.Sleep(3000);
+            System.Threading.Thread.Sleep(1000);
                 
         }
 
